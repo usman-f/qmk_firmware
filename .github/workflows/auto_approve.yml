@@ -1,20 +1,20 @@
-name: Automatic Approve
+# name: Automatic Approve
 
-permissions: {}
+# permissions: {}
 
-on:
-  schedule:
-    - cron: "*/5 * * * *"
+# on:
+#   schedule:
+#     - cron: "*/5 * * * *"
 
-jobs:
-  automatic_approve:
-    runs-on: ubuntu-latest
+# jobs:
+#   automatic_approve:
+#     runs-on: ubuntu-latest
 
-    if: github.repository == 'qmk/qmk_firmware'
+#     if: github.repository == 'qmk/qmk_firmware'
 
-    steps:
-    - uses: zvecr/automatic-approve-action@safe_files
-      with:
-        token: ${{ secrets.QMK_BOT_TOKEN }}
-        workflows: "labeler.yml,lint.yml,docs.yml"
-        safe_files: "keyboards/,docs/"
+#     steps:
+#     - uses: zvecr/automatic-approve-action@safe_files
+#       with:
+#         token: ${{ secrets.QMK_BOT_TOKEN }}
+#         workflows: "labeler.yml,lint.yml,docs.yml"
+#         safe_files: "keyboards/,docs/"
