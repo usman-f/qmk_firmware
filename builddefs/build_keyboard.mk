@@ -242,12 +242,11 @@ $(INTERMEDIATE_OUTPUT)/src/config.h: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
 	$(eval CMD=$(QMK_BIN) generate-config-h --quiet --output $(KEYMAP_H) $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/keymap.h: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+
+$(INTERMEDIATE_OUTPUT)/src/keymap.h:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-keymap-h --quiet --output $(INTERMEDIATE_OUTPUT)/src/keymap.h $(KEYMAP_JSON))
 	@$(BUILD_CMD)
-
-generated-files: $(INTERMEDIATE_OUTPUT)/src/config.h $(INTERMEDIATE_OUTPUT)/src/keymap.c $(INTERMEDIATE_OUTPUT)/src/keymap.h
 
 endif
 
@@ -255,39 +254,37 @@ endif
 COMMUNITY_RULES_MK = $(shell $(QMK_BIN) generate-community-modules-rules-mk -kb $(KEYBOARD) --quiet --escape --output $(INTERMEDIATE_OUTPUT)/src/community_rules.mk $(KEYMAP_JSON))
 include $(COMMUNITY_RULES_MK)
 
-$(INTERMEDIATE_OUTPUT)/src/community_modules.h: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/community_modules.h:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-community-modules-h -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/community_modules.h $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/community_modules.c: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/community_modules.c:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-community-modules-c -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/community_modules.c $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.c: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.c:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-community-modules-introspection-c -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.c $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.h: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.h:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-community-modules-introspection-h -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.h $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/led_matrix_community_modules.inc: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/led_matrix_community_modules.inc:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-led-matrix-community-modules-inc -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/led_matrix_community_modules.inc $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/rgb_matrix_community_modules.inc: $(KEYMAP_JSON) $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/rgb_matrix_community_modules.inc:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-rgb-matrix-community-modules-inc -kb $(KEYBOARD) --quiet --output $(INTERMEDIATE_OUTPUT)/src/rgb_matrix_community_modules.inc $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
 SRC += $(INTERMEDIATE_OUTPUT)/src/community_modules.c
-
-generated-files: $(INTERMEDIATE_OUTPUT)/src/community_modules.h $(INTERMEDIATE_OUTPUT)/src/community_modules.c $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.c $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.h $(INTERMEDIATE_OUTPUT)/src/led_matrix_community_modules.inc $(INTERMEDIATE_OUTPUT)/src/rgb_matrix_community_modules.inc
 
 include $(BUILDDEFS_PATH)/converters.mk
 
@@ -430,29 +427,40 @@ endif
 CONFIG_H += $(INTERMEDIATE_OUTPUT)/src/info_config.h
 KEYBOARD_SRC += $(INTERMEDIATE_OUTPUT)/src/default_keyboard.c
 
-$(INTERMEDIATE_OUTPUT)/src/info_config.h: $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/info_config.h:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-config-h --quiet --keyboard $(KEYBOARD) --output $(INTERMEDIATE_OUTPUT)/src/info_config.h)
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/default_keyboard.c: $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/default_keyboard.c:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-keyboard-c --quiet --keyboard $(KEYBOARD) --output $(INTERMEDIATE_OUTPUT)/src/default_keyboard.c)
 	@$(BUILD_CMD)
 
-$(INTERMEDIATE_OUTPUT)/src/default_keyboard.h: $(DD_CONFIG_FILES)
+$(INTERMEDIATE_OUTPUT)/src/default_keyboard.h:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-keyboard-h --quiet --keyboard $(KEYBOARD) --include $(FOUND_KEYBOARD_H) --output $(INTERMEDIATE_OUTPUT)/src/default_keyboard.h)
 	@$(BUILD_CMD)
-
-generated-files: $(INTERMEDIATE_OUTPUT)/src/info_config.h $(INTERMEDIATE_OUTPUT)/src/default_keyboard.c $(INTERMEDIATE_OUTPUT)/src/default_keyboard.h
-
-generated-files: $(INTERMEDIATE_OUTPUT)/src/info_deps.d
 
 $(INTERMEDIATE_OUTPUT)/src/info_deps.d:
 	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
 	$(eval CMD=$(QMK_BIN) generate-make-dependencies -kb $(KEYBOARD) -km $(KEYMAP) -o $(INTERMEDIATE_OUTPUT)/src/info_deps.d)
 	@$(BUILD_CMD)
+
+generated-files: \
+    $(INTERMEDIATE_OUTPUT)/src/config.h \
+    $(INTERMEDIATE_OUTPUT)/src/keymap.c \
+    $(INTERMEDIATE_OUTPUT)/src/keymap.h \
+    $(INTERMEDIATE_OUTPUT)/src/community_modules.h \
+    $(INTERMEDIATE_OUTPUT)/src/community_modules.c \
+    $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.c \
+    $(INTERMEDIATE_OUTPUT)/src/community_modules_introspection.h \
+    $(INTERMEDIATE_OUTPUT)/src/led_matrix_community_modules.inc \
+    $(INTERMEDIATE_OUTPUT)/src/rgb_matrix_community_modules.inc \
+    $(INTERMEDIATE_OUTPUT)/src/info_config.h \
+    $(INTERMEDIATE_OUTPUT)/src/default_keyboard.c \
+    $(INTERMEDIATE_OUTPUT)/src/default_keyboard.h \
+    $(INTERMEDIATE_OUTPUT)/src/info_deps.d
 
 -include $(INTERMEDIATE_OUTPUT)/src/info_deps.d
 
