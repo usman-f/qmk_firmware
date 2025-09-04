@@ -11,7 +11,7 @@ jobs:
           submodules: recursive
 
       - name: Compile my keyboard
-        run: qmk compile -kb skyloong/gk61/v1 -km default
+        run: qmk compile -kb skyloong/gk61 -km default
 
       - uses: actions/upload-artifact@v4
         with:
