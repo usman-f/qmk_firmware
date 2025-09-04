@@ -292,9 +292,7 @@ generated-files: $(INTERMEDIATE_OUTPUT)/src/community_modules.h $(INTERMEDIATE_O
 include $(BUILDDEFS_PATH)/converters.mk
 
 # Generate the board's version.h file.
-# $(shell $(QMK_BIN) generate-version-h $(VERSION_H_FLAGS) -q -o $(INTERMEDIATE_OUTPUT)/src/version.h)
-$(INTERMEDIATE_OUTPUT)/src/version.h:
-    $(QMK_BIN) generate-version-h $(VERSION_H_FLAGS) -q -o $@
+$(shell $(QMK_BIN) generate-version-h $(VERSION_H_FLAGS) -q -o $(INTERMEDIATE_OUTPUT)/src/version.h)
 
 MCU_ORIG := $(MCU)
 include $(wildcard $(PLATFORM_PATH)/*/mcu_selection.mk)
