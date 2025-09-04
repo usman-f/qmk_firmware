@@ -627,3 +627,5 @@ define GEN_FILES
 $1: generated-files
 endef
 $(foreach O,$(OBJ),$(eval $(call GEN_FILES,$(patsubst %.a,%.o,$(O)))))
+
+%.o: generated-files
